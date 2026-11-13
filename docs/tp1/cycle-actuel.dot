@@ -1,0 +1,29 @@
+digraph G {
+  rankdir=LR; fontname="DejaVu Sans"; labelloc=t; fontsize=20;
+  label="CamTrack — Cycle de livraison actuel (de l'idée à la vérification en production)\n ";
+  node [shape=box, style="rounded,filled", fillcolor="#FFFFFF", fontname="DejaVu Sans", fontsize=11, penwidth=1.5];
+  edge [fontname="DejaVu Sans", fontsize=10, color="#555555"];
+  idee [label="Idée / besoin\n(client ou équipe)", fillcolor="#EEEEEE"];
+  dev  [label="Développement\nsur le portable\n\nMireille\n2 à 3 semaines / lot", color="#D62728", penwidth=3];
+  test [label="Essais à la main\n« quand j'ai le temps »\n\nMireille  (?)", color="#D62728", penwidth=3];
+  zip  [label="Archive zip\nenvoyée par courriel\n\nMireille\nquelques minutes", color="#D62728", penwidth=3];
+  prise[label="Récupération\nde l'archive\n\nPaul", color="#D62728", penwidth=3];
+  dep  [label="Déploiement SSH\nvendredi soir :\ncopie, arrêt, remplacement,\nconfig modifiée à la main,\nredémarrage\n\nPaul\n2 h sans service", color="#D62728", penwidth=3];
+  verif[label="Vérification\npar appel téléphonique\nà une boutique partenaire\n\nPaul\ndurée variable  (?)", color="#D62728", penwidth=3];
+  ok   [label="En production\n(?)", shape=ellipse, fillcolor="#EEEEEE"];
+  rb   [label="Retour arrière :\nremettre l'ancien dossier\n(pas toujours conservé)\n\nPaul  (?)", color="#D62728", penwidth=3, fillcolor="#FDECEC"];
+  idee -> dev  [label="attente : non mesurée"];
+  dev  -> test [label="0 (en continu)"];
+  test -> zip  [label="attente : jusqu'à\nla fin du lot"];
+  zip  -> prise[label="ATTENTE\n1 à 3 jours", color="#D62728", fontcolor="#D62728", penwidth=2.5];
+  prise-> dep  [label="ATTENTE jusqu'au\nvendredi soir\n(0 à 7 jours)", color="#D62728", fontcolor="#D62728", penwidth=2.5];
+  dep  -> verif[label="immédiat"];
+  verif-> ok   [label="si le client\nrépond « ça marche »"];
+  verif-> rb   [label="si ça casse", style=dashed, color="#D62728", fontcolor="#D62728"];
+  rb   -> dev  [label="correction :\nnouveau cycle complet\n(≈ 3 semaines)", style=dashed, constraint=false, color="#D62728", fontcolor="#D62728"];
+  subgraph cluster_leg { label="Légende"; fontsize=11; style=dashed; color="#999999";
+    l1 [label="Action manuelle\n(entourée en rouge)", color="#D62728", penwidth=3, fontsize=9];
+    l2 [label="(?) = on ne sait pas\nsi ça a marché", fontsize=9];
+    l3 [label="Délai total idée → usage :\n≈ 3 à 4 semaines", fontsize=9, fillcolor="#FFF7D6"];
+  }
+}
